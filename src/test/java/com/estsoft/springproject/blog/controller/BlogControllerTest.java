@@ -3,8 +3,10 @@ package com.estsoft.springproject.blog.controller;
 import com.estsoft.springproject.blog.domain.dto.AddArticleRequest;
 import com.estsoft.springproject.blog.domain.Article;
 import com.estsoft.springproject.blog.repository.BlogRepository;
+import com.estsoft.springproject.blog.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.Assertions;
+//import org.junit.jupiter.api.Assertions;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +19,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 import java.util.List;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -36,6 +39,9 @@ class BlogControllerTest {
 
     @Autowired
     private BlogRepository repository;
+
+    @Autowired
+    private BlogService service;
 
     @BeforeEach
     public void setUp() {
@@ -84,22 +90,35 @@ class BlogControllerTest {
                 .andExpect(jsonPath("$[0].content").value(article.getContent()));  // 배열 내 첫 번째 요소의 content 확인
     }
 
+    // 단건 조회 API - id에 해당하는 자원이 없을 경우 (4xx 예외)
+    @Test
+    public void findOneException() throws Exception {
+        // when: API 호출
+        ResultActions resultActions = mockMvc.perform(get("/articles/{id}", 1L) // 존재하지 않는 id 999L 사용
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then: Exception 검증, resultAction STATUS CODE 검증
+        resultActions.andExpect(status().isBadRequest());
+        ;
+        assertThrows(IllegalArgumentException.class, () -> service.findBy(1L));
+    }
+
     // todo 블로그 글 삭제 API 호출 테스트
     // 글 정보 insert, 삭제 Api 호출, (STATUS CODE 검증), respository.findAll()
     @Test
     public void deleteTest() throws Exception {
         // given: 테스트할 글 저장
-        Article article = repository.save(new Article("blog title","blog content"));
+        Article article = repository.save(new Article("blog title", "blog content"));
         Long id = article.getId();
 
         // when: 글 삭제 API 호출
-        ResultActions resultActions = mockMvc.perform(delete("/articles/{id}",id));
+        ResultActions resultActions = mockMvc.perform(delete("/articles/{id}", id));
 
         // then: 상태 코드가 200 OK 인지 확인
         resultActions.andExpect(status().isOk());
 
         // 저장된 글이 모두 삭제되었는지 확인
         List<Article> articleList = repository.findAll();
-        Assertions.assertThat(articleList).isEmpty();
+        Assertions.assertThat(articleList).isEmpty();  // 저장된 글이 없는지 검증
     }
 }
