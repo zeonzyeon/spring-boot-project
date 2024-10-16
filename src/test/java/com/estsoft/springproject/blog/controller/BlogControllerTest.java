@@ -140,4 +140,26 @@ class BlogControllerTest {
         resultActions.andExpect(status().isOk())
                 .andExpect(jsonPath("$.title").value(request.getTitle()));
     }
+
+    // 수정 API 호출시 예외 발생했을 경우 = status code 4xx, 예외 검증
+    @Test
+    public void updateArticleException() throws Exception {
+        // 존재하지 않는 id로 수정 요청 (예: 999L)
+        Long invalidId = 999L;
+
+        // 수정할 데이터(object) -> json
+        UpdateArticleRequest request = new UpdateArticleRequest("title", "content");
+        String reqeustBody = objectMapper.writeValueAsString(request);
+
+        // when: 존재하지 않는 id로 수정 요청
+        ResultActions resultActions = mockMvc.perform(put("/articles/{id}", invalidId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(reqeustBody));
+
+        // then: 상태 코드가 4xx (예: 404 Not Found) 인지 확인
+        resultActions.andExpect(status().is4xxClientError()); // 404 상태 코드 확인
+
+        // 서비스 레이어에서 예외가 발생했는지 확인 (IllegalArgumentException 혹은 CustomException)
+        assertThrows(IllegalArgumentException.class, () -> service.update(invalidId, request));
+    }
 }
