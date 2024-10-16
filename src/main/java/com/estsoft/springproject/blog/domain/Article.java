@@ -23,7 +23,8 @@ public class Article {
     // 생성자
     @Builder
     public Article(String title, String content) {
-
+        this.title = title;
+        this.content = content;
     }
 
     public ArticleResponse convert() {
@@ -32,5 +33,12 @@ public class Article {
                 .title(this.title)
                 .content(this.content)
                 .build();
+    }
+
+    public void update(String title, String content){
+//        if(!title.isBlank()) { this.title = title; }
+//        if(!content.isBlank()) { this.content = content; }
+        this.title = title;
+        this.content = content;
     }
 }

@@ -3,6 +3,7 @@ package com.estsoft.springproject.blog.controller;
 import com.estsoft.springproject.blog.domain.dto.AddArticleRequest;
 import com.estsoft.springproject.blog.domain.Article;
 import com.estsoft.springproject.blog.domain.dto.ArticleResponse;
+import com.estsoft.springproject.blog.domain.dto.UpdateArticleRequest;
 import com.estsoft.springproject.blog.service.BlogService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,13 @@ public class BlogController {
     public ResponseEntity<Void> deleteById(@PathVariable Long id) {
         service.deleteBy(id);
         return ResponseEntity.ok().build();
+    }
+
+    // /articles/{id} 수정 API request body
+    @PutMapping("/articles/{id}")
+    public ResponseEntity<ArticleResponse> updateById(@PathVariable Long id, @RequestBody UpdateArticleRequest request) {
+        Article updateArticle = service.update(id, request);
+        return ResponseEntity.ok(updateArticle.convert());
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
