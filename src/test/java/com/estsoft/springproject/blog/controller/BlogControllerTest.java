@@ -2,6 +2,7 @@ package com.estsoft.springproject.blog.controller;
 
 import com.estsoft.springproject.blog.domain.dto.AddArticleRequest;
 import com.estsoft.springproject.blog.domain.Article;
+import com.estsoft.springproject.blog.domain.dto.UpdateArticleRequest;
 import com.estsoft.springproject.blog.repository.BlogRepository;
 import com.estsoft.springproject.blog.service.BlogService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -120,5 +121,23 @@ class BlogControllerTest {
         // 저장된 글이 모두 삭제되었는지 확인
         List<Article> articleList = repository.findAll();
         Assertions.assertThat(articleList).isEmpty();  // 저장된 글이 없는지 검증
+    }
+
+    // PUT /articles/{id} body(json content) 요청
+    @Test
+    public void updateArticle() throws Exception {
+        Article article = repository.save(new Article("blog title", "blog content"));
+
+        // 수정할 데이터(object) -> json
+        UpdateArticleRequest request = new UpdateArticleRequest("변경 제목","변경 내용");
+        String updateJsonContent = objectMapper.writeValueAsString(request);
+
+        ResultActions resultActions = mockMvc.perform(put("/articles/{id}", article.getId())
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(updateJsonContent)
+        );
+
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.title").value(request.getTitle()));
     }
 }
