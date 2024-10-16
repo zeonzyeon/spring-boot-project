@@ -18,7 +18,9 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+
 import java.util.List;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.springframework.data.jpa.domain.AbstractPersistable_.id;
@@ -47,6 +49,7 @@ class BlogControllerTest {
     @BeforeEach
     public void setUp() {
         mockMvc = MockMvcBuilders.webAppContextSetup(context).build();
+        repository.deleteAll();
     }
 
     // POST /articles API 테스트
@@ -72,35 +75,48 @@ class BlogControllerTest {
         assertThat(articleList.size()).isEqualTo(1);
     }
 
+    // 블로그 게시글 조회 API
     @Test
-    public void testFindAll() throws Exception {
-        // given
-        final String url = "/api/articles";
-        final String title = "제목";
-        final String content = "내용";
-        Article article = repository.save(new Article(title, content));
-
-        // when
+    public void FindAll() throws Exception {
+        // given: 조회 API에 필요한 값 셋팅
+        Article article = repository.save(new Article("title", "content"));
+        // when: 조회 API
         ResultActions resultActions = mockMvc.perform(get("/articles")
                 .accept(MediaType.APPLICATION_JSON));
-
-        // then : 정상적으로 요청이 되었는지 검증
+        // then: API 호출 결과 검증  json
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(id))  // 배열 내 첫 번째 요소의 id 확인
-                .andExpect(jsonPath("$[0].title").value(article.getTitle()))  // 배열 내 첫 번째 요소의 title 확인
-                .andExpect(jsonPath("$[0].content").value(article.getContent()));  // 배열 내 첫 번째 요소의 content 확인
+                .andExpect(jsonPath("$[0].title").value(article.getTitle()))
+                .andExpect(jsonPath("$[0].content").value(article.getContent()));
     }
 
-    // 단건 조회 API - id에 해당하는 자원이 없을 경우 (4xx 예외)
+    // 블로그 단건 조회 API 테스트 : data insert (id=1) , GET /articles/1 성공
+    @Test
+    public void findOne() throws Exception {
+        // given: data insert
+        Article article = repository.save(new Article("blog title", "blog content"));
+        Long id = article.getId();
+
+        // when: API 호출
+        ResultActions resultActions = mockMvc.perform(get("/articles/{id}", id)
+                .accept(MediaType.APPLICATION_JSON));
+
+        // then: API 호출 결과 검증
+        // -> given절 에서 추가한 데이터가 그대로 json의 형태로 넘어오는지
+        resultActions.andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.title").value(article.getTitle()))
+                .andExpect(jsonPath("$.content").value(article.getContent()));
+    }
+
+    // 단건 조회 API - id에 해당하는 자원이 없을 경우 (4xx) 예외처리 검증
     @Test
     public void findOneException() throws Exception {
         // when: API 호출
-        ResultActions resultActions = mockMvc.perform(get("/articles/{id}", 1L) // 존재하지 않는 id 999L 사용
+        ResultActions resultActions = mockMvc.perform(get("/articles/{id}", 1L)
                 .accept(MediaType.APPLICATION_JSON));
 
-        // then: Exception 검증, resultAction STATUS CODE 검증
+        // then: Exception 검증, STATUS CODE 검증
         resultActions.andExpect(status().isBadRequest());
-        ;
         assertThrows(IllegalArgumentException.class, () -> service.findBy(1L));
     }
 
@@ -129,7 +145,7 @@ class BlogControllerTest {
         Article article = repository.save(new Article("blog title", "blog content"));
 
         // 수정할 데이터(object) -> json
-        UpdateArticleRequest request = new UpdateArticleRequest("변경 제목","변경 내용");
+        UpdateArticleRequest request = new UpdateArticleRequest("변경 제목", "변경 내용");
         String updateJsonContent = objectMapper.writeValueAsString(request);
 
         ResultActions resultActions = mockMvc.perform(put("/articles/{id}", article.getId())
@@ -138,28 +154,26 @@ class BlogControllerTest {
         );
 
         resultActions.andExpect(status().isOk())
-                .andExpect(jsonPath("$.title").value(request.getTitle()));
+                .andExpect(jsonPath("$.title").value(request.getTitle()))
+                .andExpect(jsonPath("$.content").value(request.getContent()));
     }
 
     // 수정 API 호출시 예외 발생했을 경우 = status code 4xx, 예외 검증
     @Test
     public void updateArticleException() throws Exception {
-        // 존재하지 않는 id로 수정 요청 (예: 999L)
-        Long invalidId = 999L;
-
-        // 수정할 데이터(object) -> json
+        // given : id, requestBody
+        Long notExistsId = 1000L;
         UpdateArticleRequest request = new UpdateArticleRequest("title", "content");
-        String reqeustBody = objectMapper.writeValueAsString(request);
+        String requestBody = objectMapper.writeValueAsString(request);
 
-        // when: 존재하지 않는 id로 수정 요청
-        ResultActions resultActions = mockMvc.perform(put("/articles/{id}", invalidId)
+        // when : 수정 API 호출    (/articles/{id}, requestBody)
+        ResultActions resultActions = mockMvc.perform(put("/articles/{id}", notExistsId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(reqeustBody));
+                .content(requestBody));
 
-        // then: 상태 코드가 4xx (예: 404 Not Found) 인지 확인
-        resultActions.andExpect(status().is4xxClientError()); // 404 상태 코드 확인
-
-        // 서비스 레이어에서 예외가 발생했는지 확인 (IllegalArgumentException 혹은 CustomException)
-        assertThrows(IllegalArgumentException.class, () -> service.update(invalidId, request));
+        // then : 400 Bad Request 검증, Exception 검증
+        resultActions.andExpect(status().isBadRequest());
+        assertThrows(IllegalArgumentException.class, () -> service.update(notExistsId, request));
+        assertThrows(IllegalArgumentException.class, () -> service.findBy(notExistsId));
     }
 }

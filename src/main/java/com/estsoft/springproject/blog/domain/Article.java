@@ -28,11 +28,7 @@ public class Article {
     }
 
     public ArticleResponse convert() {
-        return ArticleResponse.builder()
-                .id(this.id)
-                .title(this.title)
-                .content(this.content)
-                .build();
+        return new ArticleResponse(id, title, content);
     }
 
     public void update(String title, String content){

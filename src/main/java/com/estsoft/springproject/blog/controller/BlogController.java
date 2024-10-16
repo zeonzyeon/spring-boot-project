@@ -23,11 +23,11 @@ public class BlogController {
 
     //    @RequestMapping(method = RequestMethod.POST, value = "/articles")
     @PostMapping("/articles")
-    public ResponseEntity<Article> writeArticle(@RequestBody AddArticleRequest request) {
+    public ResponseEntity<ArticleResponse> writeArticle(@RequestBody AddArticleRequest request) {
         log.info("request: {}, {}", request.getTitle(), request.getContent());
         Article article = service.saveArticle(request);
         return ResponseEntity.status(HttpStatus.CREATED)
-                .body(article);
+                .body(article.convert());
     }
 
     // Request Mapping      조회: HTTP METHOD
