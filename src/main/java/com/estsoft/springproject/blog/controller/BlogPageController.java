@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -38,5 +39,16 @@ public class BlogPageController {
         model.addAttribute("article", new ArticleViewResponse(article));
 
         return "article"; // article.html
+    }
+
+    @GetMapping("/new-articles")
+    public String addArticle(@RequestParam(required = false) Long id, Model model){
+        if(id == null) { // 새로운 게시글 생성
+            model.addAttribute("article",new ArticleViewResponse());
+        } else { // 게시글 수정 : 기존 블로그 가져오기
+            Article article = blogService.findBy(id);
+            model.addAttribute("article", new ArticleViewResponse(article));
+        }
+        return "newArticle"; // newArticle.html
     }
 }
