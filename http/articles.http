@@ -25,6 +25,3 @@ Content-Type: application/json
   "title": "변경된 제목",
   "content": "변경된 내용"
 }
-
-### 블로그 뷰
-GET localhost:8080/thymeleaf/example

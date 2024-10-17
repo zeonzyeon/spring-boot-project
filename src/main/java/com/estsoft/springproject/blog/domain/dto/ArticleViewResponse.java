@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 // view 구성을 위한 DTO
 
 @Getter
@@ -15,6 +17,7 @@ public class ArticleViewResponse {
     private Long id;
     private String title;
     private String content;
+    private LocalDateTime createdAt;
 
     public ArticleViewResponse(Article article) {
         this.id = article.getId();
