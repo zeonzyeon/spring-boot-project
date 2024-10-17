@@ -13,7 +13,7 @@ if (deleteButton) {
     });
 }
 
-// 수정/생성 기능을 위한 API 구현
+// 수정 기능을 위한 API 구현
 const modifyButton = document.getElementById('modify-btn');
 
 if (modifyButton) {

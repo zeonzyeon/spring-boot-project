@@ -41,7 +41,7 @@ public class BlogPageController {
         return "article"; // article.html
     }
 
-    @GetMapping("/new-articles")
+    @GetMapping("/new-article")
     public String addArticle(@RequestParam(required = false) Long id, Model model){
         if(id == null) { // 새로운 게시글 생성
             model.addAttribute("article",new ArticleViewResponse());
