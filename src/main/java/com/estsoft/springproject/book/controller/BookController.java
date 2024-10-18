@@ -49,7 +49,7 @@ public class BookController {
 
         bookService.saveOne(new Book(id, name, author));
 
-        return "redirect:/books"; // 재호출
+        return "redirect:/books"; // 재호출 GET /books
     }
 
 }
