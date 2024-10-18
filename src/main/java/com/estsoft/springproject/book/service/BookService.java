@@ -24,23 +24,17 @@ public class BookService {
     }
 
     // 책 전체 조회
-    @GetMapping
     public List<Book> findAll() {
         return bookRepository.findAll(Sort.by("id")); // 오름차순
     }
 
     // 책 단건 조회
-    @GetMapping("/{id}")
-    public List<Book> findBy(@PathVariable String id) {
-        Optional<Book> book = bookRepository.findById(id);
-        return book.map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public Book findBy(String id) {
+        return bookRepository.findById(id).orElse(new Book());
     }
 
     // 책 생성
-    @PostMapping
-    public - createBook(@RequestBody Book book) {
-        Book savedBook = bookRepository.save(book);
-        return ResponseEntity.ok(savedBook);
+    public Book saveOne(Book book) {
+        return bookRepository.save(book);
     }
 }
