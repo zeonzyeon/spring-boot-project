@@ -10,3 +10,11 @@
 
 - `Spring Boot`로 API 구현
 - `Thymleaf`를 이용하여 Form 작성
+
+<br>
+
+## Filter / Intercepter
+
+- 클라이언트의 요청이 처리되는 순서
+
+> HTTP 요청 → 필터 → 인터셉터 → Controller → 인터셉터 → 필터 → 응답
