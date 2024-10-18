@@ -29,14 +29,14 @@ public class FirstConfig {
         return filter;
     }
 
-    @Bean
-    public FilterRegistrationBean thirdFilter() {
-        FilterRegistrationBean<Filter> filter = new FilterRegistrationBean<>();
-
-        filter.setFilter(new ThirdFilter());
-        filter.addUrlPatterns("/books");
-        filter.setOrder(3);
-
-        return filter;
-    }
+//    @Bean
+//    public FilterRegistrationBean thirdFilter() {
+//        FilterRegistrationBean<Filter> filter = new FilterRegistrationBean<>();
+//
+//        filter.setFilter(new ThirdFilter());
+//        filter.addUrlPatterns("/books");
+//        filter.setOrder(3);
+//
+//        return filter;
+//    }
 }
