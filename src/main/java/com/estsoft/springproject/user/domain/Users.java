@@ -29,7 +29,7 @@ public class Users implements UserDetails {
     private String password;
 
     @Builder
-    public void Users(String email, String password, String auth) {
+    public Users(String email, String password) {
         this.email = email;
         this.password = password;
     }
