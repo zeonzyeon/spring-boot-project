@@ -12,5 +12,8 @@ public class UserViewController {
     }
 
     // GET /signup -> 회원가입 페이지 연결
-
+    @GetMapping("/signup")
+    public String signup() {
+        return "signup";
+    }
 }

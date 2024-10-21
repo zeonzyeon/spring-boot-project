@@ -20,7 +20,7 @@ public class UserService {
     // 회원가입 처리 (비즈니스 로직)
     public Users save(AddUserRequest dto) {
         String password = dto.getPassword();
-        String email = dto.getEmail();
+        String email = dto.getUsername();
         String encodedPassword = encoder.encode(password);
 
         Users users = new Users(email, encodedPassword);

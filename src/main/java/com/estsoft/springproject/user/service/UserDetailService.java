@@ -1,7 +1,6 @@
 package com.estsoft.springproject.user.service;
 
 import com.estsoft.springproject.user.repository.UserRepository;
-import org.springframework.context.annotation.Bean;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
