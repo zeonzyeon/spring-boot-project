@@ -3,12 +3,15 @@ package com.estsoft.springproject.blog.controller;
 import com.estsoft.springproject.blog.domain.Article;
 import com.estsoft.springproject.blog.domain.dto.ArticleViewResponse;
 import com.estsoft.springproject.blog.service.BlogService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.security.Principal;
 import java.util.List;
 
 @Controller
@@ -35,6 +38,9 @@ public class BlogPageController {
     // GET /articles/{id} 상세페이지 리턴
     @GetMapping("/articles/{id}")
     public String showDetails(@PathVariable Long id, Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Principal principal = (Principal) authentication.getPrincipal();
+
         Article article = blogService.findBy(id);
         model.addAttribute("article", new ArticleViewResponse(article));
 

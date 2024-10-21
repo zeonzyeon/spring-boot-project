@@ -40,6 +40,8 @@ public class WebSecurityConfiguration {
 //                .anyRequest().authenticated()
                 // 4) 폼 기반 로그인 설정
                 .formLogin(custom -> custom.loginPage("/login")
+                        .usernameParameter("email")  // 폼에서 이메일을 사용자명으로 사용
+                        .passwordParameter("password")  // 비밀번호 필드
                         .defaultSuccessUrl("/articles", true))
 //                .loginPage("/login")
 //                .defaultSuccessUrl("/articles") // 로그인 성공했을 경우 리디렉션
@@ -49,7 +51,7 @@ public class WebSecurityConfiguration {
 //                .logoutSuccessUrl("/login")
 //                .invalidateHttpSession(true)
                 // 6) csrf 비활성화
-                .csrf(csrf -> csrf.disable())
+//                .csrf(custom -> custom.disable())
 //                .csrf().disable()
                 .build();
     }

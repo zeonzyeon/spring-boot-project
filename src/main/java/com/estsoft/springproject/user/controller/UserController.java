@@ -15,9 +15,15 @@ public class UserController {
     }
 
     // POST /user 요청 받고 회원가입 처리 -> /login 리디렉션
-    @PostMapping("/use")
+    @PostMapping("/signup")
     public String save(@ModelAttribute AddUserRequest request) {
         userService.save(request);
         return "redirect:/login";
     }
+
+//    @GetMapping("/logout")
+//    public String logout(HttpServletRequest request, HttpServletResponse response) {
+//        new SecurityContextLogoutHandler().logout(request, response, SecurityContextHolder.getContext().getAuthentication());
+//        return "redirect:/login";
+//    }
 }
