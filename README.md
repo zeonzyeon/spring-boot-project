@@ -42,5 +42,14 @@
 
 - 회원 가입 / 로그아웃 구현
 - `Thymleaf`를 이용하여 회원 기입 / 로그인 / 로그아웃 뷰 작성
+- 권한 추가
+
+<br>
+
+## API 문서 자동화 - Swagger UI
+
+- `SwaggerConfig` 설정
+- `/swagger-ui/index.html` 경로로 접속하여 확인
+- `@Tag` 어노테이션 설정
 
 

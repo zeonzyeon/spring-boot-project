@@ -5,6 +5,7 @@ import com.estsoft.springproject.blog.domain.Article;
 import com.estsoft.springproject.blog.domain.dto.ArticleResponse;
 import com.estsoft.springproject.blog.domain.dto.UpdateArticleRequest;
 import com.estsoft.springproject.blog.service.BlogService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import java.util.List;
 @Slf4j
 @RestController
 @RequestMapping("/api")
+@Tag(name = "블로그 저장/수정/삭제/조회용 API", description = "API 설명을 이곳에 작성하면 됩니다")
 public class BlogController {
     private final BlogService service;
 

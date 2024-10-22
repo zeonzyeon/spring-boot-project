@@ -24,7 +24,7 @@ public class WebSecurityConfiguration {
     public WebSecurityCustomizer ignore() { // 1) 스프링 시큐리티 기능 비활성화
         return webSecurity -> webSecurity.ignoring()
                 .requestMatchers(toH2Console()) // h2-console
-                .requestMatchers("/static/**");
+                .requestMatchers("/static/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html");
     }
 
     // 2) 특정 요청에 대한 보안 구성
