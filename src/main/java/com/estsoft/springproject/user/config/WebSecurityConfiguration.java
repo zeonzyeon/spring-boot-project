@@ -32,6 +32,7 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/login", "/signup", "/user").permitAll()
+                                .requestMatchers("/articles/**").hasRole("ADMIN")
                                 .anyRequest().authenticated()
                 )
                 // 3) 인증, 인가 설정
@@ -40,9 +41,7 @@ public class WebSecurityConfiguration {
 //                .anyRequest().authenticated()
                 // 4) 폼 기반 로그인 설정
                 .formLogin(custom -> custom.loginPage("/login")
-                        .usernameParameter("email")  // 폼에서 이메일을 사용자명으로 사용
-                        .passwordParameter("password")  // 비밀번호 필드
-                        .defaultSuccessUrl("/articles", true))
+                        .defaultSuccessUrl("/articles"))
 //                .loginPage("/login")
 //                .defaultSuccessUrl("/articles") // 로그인 성공했을 경우 리디렉션
                 // 5) 로그아웃 설정
@@ -51,7 +50,7 @@ public class WebSecurityConfiguration {
 //                .logoutSuccessUrl("/login")
 //                .invalidateHttpSession(true)
                 // 6) csrf 비활성화
-//                .csrf(custom -> custom.disable())
+                .csrf(custom -> custom.disable())
 //                .csrf().disable()
                 .build();
     }

@@ -12,21 +12,21 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
-@Table(name = "users")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
 @Entity
 public class Users implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", updatable = false)
     private Long id;
 
-    @Column(name = "email", nullable = false, unique = true)
+    @Column(nullable = false)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(nullable = false)
     private String password;
+
+    public Users() {
+    }
 
     @Builder
     public Users(String email, String password) {
@@ -42,11 +42,6 @@ public class Users implements UserDetails {
     @Override
     public String getUsername() {
         return email;
-    }
-
-    @Override
-    public String getPassword() {
-        return password;
     }
 
     // 계정 만료 여부 반환 (true: 만료 안됨)
