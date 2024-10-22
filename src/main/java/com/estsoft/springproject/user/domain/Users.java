@@ -36,7 +36,9 @@ public class Users implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { // 인가 - 권한
-        return List.of(new SimpleGrantedAuthority("user")); // ex) 새싹, 주니어, 중니어, 시니어, ..., 권리자
+        // ROLE_ADMIN
+        return List.of(new SimpleGrantedAuthority("user"), new SimpleGrantedAuthority("ROLE_ADMIN")
+        ); // ex) 새싹, 주니어, 중니어, 시니어, ..., 권리자
     }
 
     @Override
