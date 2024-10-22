@@ -5,7 +5,12 @@ import com.estsoft.springproject.blog.domain.Article;
 import com.estsoft.springproject.blog.domain.dto.ArticleResponse;
 import com.estsoft.springproject.blog.domain.dto.UpdateArticleRequest;
 import com.estsoft.springproject.blog.service.BlogService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.media.Content;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +39,10 @@ public class BlogController {
     }
 
     // Request Mapping      조회: HTTP METHOD
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "100", description = "요청에 성공했습니다.", content = @Content(mediaType = "application/json"))
+    })
+    @Operation(summary = "블로그 전체 목록 보기", description = "블로그 메인 화면에서 보여주는 전체 목록")
     @GetMapping("/articles")
     public ResponseEntity<List<ArticleResponse>> finalAll() {
         List<Article> articleList = service.findAll();
@@ -45,6 +54,7 @@ public class BlogController {
     }
 
     // 단건 조회 API (Request mapping) 만들기 GET /articles/{id}
+    @Parameter(name = "id", description = "블로그 글 ID", example = "45")
     @GetMapping("/articles/{id}")
     public ResponseEntity<ArticleResponse> findById(@PathVariable Long id) {
         Article article = service.findBy(id);  // Exception 발생 시 5xx 서버 오류 대신 4xx 상태 코드로 처리

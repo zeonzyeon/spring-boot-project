@@ -49,7 +49,7 @@
 ## API 문서 자동화 - Swagger UI
 
 - `SwaggerConfig` 설정
-- `/swagger-ui/index.html` 경로로 접속하여 확인
-- `@Tag` 어노테이션 설정
+- `'/swagger-ui/index.html'` 경로로 접속하여 확인
+- `@Tag`, `@Operation`, `@ApiResponses` API 어노테이션 설정
 
 
