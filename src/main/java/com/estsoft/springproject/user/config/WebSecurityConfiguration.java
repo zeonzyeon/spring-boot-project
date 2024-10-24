@@ -23,7 +23,7 @@ public class WebSecurityConfiguration {
     @Bean
     public WebSecurityCustomizer ignore() { // 1) 스프링 시큐리티 기능 비활성화
         return webSecurity -> webSecurity.ignoring()
-                .requestMatchers(toH2Console()) // h2-console
+//                .requestMatchers(toH2Console()) // h2-console
                 .requestMatchers("/static/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html");
     }
 
@@ -32,8 +32,11 @@ public class WebSecurityConfiguration {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity.authorizeHttpRequests(
                         custom -> custom.requestMatchers("/login", "/signup", "/user").permitAll()
-                                .requestMatchers("/articles/**").hasRole("ADMIN")
-                                .anyRequest().authenticated()
+//                                .requestMatchers("/articles/**").hasRole("ADMIN")
+//                                .anyRequest().authenticated()
+//                                .requestMatchers("/articles/**").hasAuthority("ADMIN")       // ADMIN
+                                .anyRequest().permitAll()
+//                            .anyRequest().authenticated()
                 )
                 // 3) 인증, 인가 설정
 //                .requestMatchers("/login", "/signup", "/user").permitAll()
