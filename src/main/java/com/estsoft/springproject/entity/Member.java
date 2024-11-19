@@ -2,9 +2,11 @@ package com.estsoft.springproject.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
+@NoArgsConstructor
 public class Member {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,4 +15,10 @@ public class Member {
 
     @Column(name = "name", nullable = false)
     private String name;    // DB 테이블의 name과 컬럼 매칭
+
+    // ID와 이름을 초기화하는 생성자 추가
+    public Member(Long id, String name) {
+        this.id = id;
+        this.name = name;
+    }
 }

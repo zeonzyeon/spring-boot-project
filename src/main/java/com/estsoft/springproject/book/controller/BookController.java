@@ -19,7 +19,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    // 책 전체 조회 API
+    // GET /books 책 전체 목록 조회
     @GetMapping
     public String showAll(Model model) {
         List<BookDTO> list = bookService.findAll()
@@ -31,7 +31,7 @@ public class BookController {
         return "bookManagement";
     }
 
-    // 책 단건 조회 API
+    // 책 정보 단건 조회
     @GetMapping("/{id}")
     public String showOne(@PathVariable String id, Model model) {
         Book book = bookService.findBy(id);
@@ -39,7 +39,7 @@ public class BookController {
         return "bookDetail";
     }
 
-    // 책 정보 생성 API
+    // 책 정보 생성
     // id, name, author 정보 받아서 DB에 저장
     // 저장된 책 정보가 바로 노출될 수 있도록 화면 구성 (bookManagement.html)
     @PostMapping
