@@ -22,7 +22,7 @@ public class BlogService {
         return repository.save(request.toEntity());
     }
 
-    // blog 게시글 조화
+    // blog 게시글 조회
     public List<Article> findAll() {
         return repository.findAll();
     }

@@ -54,8 +54,23 @@
 
 <br>
 
-## AWS 서버에 배포
+## REST API 구현
+
+- `MySQL` DB로 연결
+- 댓글 정보 comment 테이블 추가
+- 댓글 정보를 조회, 생성, 수정, 삭제하는 `REST API` 구현
+
+<br>
+
+## AWS EC2 서비스에 배포
 
 - `Jasypt`를 통해 민감한 정보 암호화 (AES 알고리즘)
+
+<br>
+
+## Docker
+
+- `Docker Compose`: `docker-compose.yml` 파일을 사용해 여러 컨테이너를 쉽게 설정하고 실행
+- `Docker Image`: `Dockerfile`을 기반으로 애플리케이션의 컨테이너 이미지를 생성
 
 
