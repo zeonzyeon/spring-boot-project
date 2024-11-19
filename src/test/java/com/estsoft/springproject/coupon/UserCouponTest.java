@@ -38,7 +38,6 @@ public class UserCouponTest {
 
 	@Test
 	public void 쿠폰이_유효하지_않을경우_발급안된다() {
-		// todo
 		User user = new User("area00");
 		assertEquals(0, user.getTotalCouponCount());
 
