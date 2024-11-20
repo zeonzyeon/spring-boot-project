@@ -18,7 +18,7 @@ public class DummyCoupon implements ICoupon {
 	}
 
 	@Override
-	public boolean isAppliable() {
+	public boolean isAppliable(Item item) {
 		return false;
 	}
 
