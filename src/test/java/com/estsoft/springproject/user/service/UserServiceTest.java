@@ -33,21 +33,24 @@ public class UserServiceTest {
 		// given
 		String email = "test@test.com";
 		String rawpassword = "test";
+		String encodedPassword = "encodedPassword";
+
 		AddUserRequest request = new AddUserRequest();
 		request.setEmail(email);
-		request.setPassword(encoder.encode(rawpassword));
+		request.setPassword(rawpassword);
 
-		Mockito.when(userRepository.save(any()))
-			.thenReturn(new Users(request.getEmail(), request.getPassword()));
+		doReturn(encodedPassword).when(encoder).encode(rawpassword);
+		Mockito.when(userRepository.save(any(Users.class)))
+			.thenReturn(new Users(email, encodedPassword));
 
 		// when
 		Users returnUser = service.save(request);
 
 		// then
-		assertEquals(request.getEmail(), returnUser.getEmail());
-		assertEquals(request.getPassword(), returnUser.getPassword());
+		assertEquals(email, returnUser.getEmail());
+		assertEquals(encodedPassword, returnUser.getPassword());
 
 		verify(userRepository, times(1)).save(any(Users.class));
-		verify(encoder, times(1)).encode(any(String.class));
+		verify(encoder, times(1)).encode(rawpassword);
 	}
 }

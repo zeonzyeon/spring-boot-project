@@ -29,7 +29,7 @@ public class BlogControllerTest2 {
 	@InjectMocks
 	BlogController blogController;
 
-	@MockBean
+	@Mock
 	BlogService blogService;
 
 	MockMvc mockMvc;
@@ -57,8 +57,8 @@ public class BlogControllerTest2 {
 
 		// then
 		actions.andExpect(status().isCreated())
-			.andExpect(jsonPath("content").value(request.getContent()))
-			.andExpect(jsonPath("title").value(request.getTitle()));
+			.andExpect(jsonPath("title").value(request.getTitle()))
+			.andExpect(jsonPath("content").value(request.getContent()));
 	}
 
 	@Test
@@ -66,18 +66,14 @@ public class BlogControllerTest2 {
 		// given
 		Long id = 1L;
 
-		// when
-		ResultActions resultActions = mockMvc.perform(delete("/articles/{id}", id));
+		mockMvc.perform(delete("/api/articles/{id}", id))
+			.andExpect(status().isOk());
 
-		// then
-		// 1. HTTP 상태 코드 200 확인
-		resultActions.andExpect(status().isOk());
-
-		// 2. 서비스의 deleteBy 메서드가 한 번 호출되었는지 확인
 		verify(blogService, times(1)).deleteBy(id);
 	}
 
 	// GET /articles/{id} : 블로그 게시글 단건 조회
+	@DisplayName("블로그 게시글 단건 조회 테스트")
 	@Test
 	public void testFindOne() throws Exception {
 		// given
@@ -88,10 +84,10 @@ public class BlogControllerTest2 {
 			.when(blogService).findBy(id);
 
 		// when
-		ResultActions resultActions = mockMvc.perform(get("/api/articles/{id}",id));
+		ResultActions actions = mockMvc.perform(get("/api/articles/{id}",id));
 
 		// then
-		resultActions.andExpect(status().isOk())
+		actions.andExpect(status().isOk())
 			.andExpect(jsonPath("title").value("title"))
 			.andExpect(jsonPath("content").value("content"));
 	}

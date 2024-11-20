@@ -29,8 +29,6 @@ class MemberControllerTest {
     @Autowired
     MockMvc mockMvc;
 
-    @Autowired
-    MemberRepository repository;
 	@Autowired
 	private MemberRepository memberRepository;
 
@@ -42,22 +40,17 @@ class MemberControllerTest {
     @DisplayName("멤버 목록 조회에 성공한다")
     @Test
     public void testGetAllMembers() throws Exception {
-        // given: 멤버 목록 저장
-        String url = "/members";
-        Member savedMember = memberRepository.save(new Member(1L, "홍길동"));
+        // given: 멤버 저장
+        Member savedMember = memberRepository.save(new Member(1L, "홍길동")); // 데이터 저장
 
-        // when:    GET /members
-        ResultActions resultActions = mockMvc.perform(get(url) // 1
-                .accept(MediaType.APPLICATION_JSON)); // 2
+        // when: GET /members 호출
+        ResultActions resultActions = mockMvc.perform(get("/members") // URL 호출
+            .accept(MediaType.APPLICATION_JSON));
 
-        // then:    response 검증
-        resultActions.andExpect(status().is2xxSuccessful()) // 3
-            // 4. 응답의 0번째 값이 DB에 저장한 값고 같은지 검증
-            //     .andExpect(jsonPath("$[0].id").value(1))
-            //     .andExpect(jsonPath("$[1].id").value(2))
-            .andExpect(jsonPath("$[0].id").value(savedMember.getId()))
-            .andExpect(jsonPath("$[0].name").value(savedMember.getName()));
-        ;
+        // then: 응답 검증
+        resultActions.andExpect(status().isOk()) // HTTP 200 상태 확인
+            .andExpect(jsonPath("$[0].id").value(savedMember.getId())) // 저장된 데이터와 비교
+            .andExpect(jsonPath("$[0].name").value(savedMember.getName())); // 이름 확인
     }
 
     @AfterEach
