@@ -133,6 +133,13 @@
 - `jacoco`와 `sonarqube` 설정
 - `SonarQube`로 코드 정적 분석
 
+<br>
+
+## CI/CD 환경 구축
+
+- `GitHub Actions` (빌드 및 테스트 자동화)
+- `S3 버킷` 생성 및 `IAM`(권한컨트롤) 설정
+- `AWS EC2` 및 `CodeDeploy`: EC2에서 애플리케이션 실행 및 자동 배포 관리
 
 
 
