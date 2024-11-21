@@ -17,6 +17,8 @@ on:
 env:
   S3_BUCKET_NAME: content-i-like
   AWS_REGION: ap-northeast-2
+  CODEDEPLOY_NAME: app-deploy
+  CODEDEPLOY_GROUP: app-deploy-group
 
 jobs:
   build:
