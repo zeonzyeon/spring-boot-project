@@ -124,7 +124,7 @@
 
 
 - 사용자의 정보를 저장하는 `UserService.save` 메소드 테스트 작성
-- `블로그 글 작성, 목록 조회 API`로 Controller 단위 테스트 작성
+- 블로그 글 작성, 목록 조회 API로 Controller 단위 테스트 작성
 
 <br>
 
@@ -138,7 +138,7 @@
 ## CI/CD 환경 구축
 
 - `GitHub Actions` (빌드 및 테스트 자동화)
-- `S3 버킷` 생성 및 `IAM`(권한컨트롤) 설정
+- `S3 버킷` 생성 및 `IAM` (권한컨트롤) 설정
 - `AWS EC2` 및 `CodeDeploy`: EC2에서 애플리케이션 실행 및 자동 배포 관리
 
 
